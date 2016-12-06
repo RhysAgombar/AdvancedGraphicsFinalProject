@@ -23,14 +23,14 @@ int window;
 
 glm::mat4 projection;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+glm::vec3 cameraPos = glm::vec3(698.040894, 1404.13684, 2905.97388);//0.0f, 0.0f, 3.0f); // cameraPos = {x=698.040894 y=1404.13684 z=2905.97388}
+glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f); // cameraTarget = {x=0.000000000 y=0.000000000 z=0.000000000 ...}
+glm::vec3 cameraFront = glm::vec3(0.0778644159, -0.704634190, -0.705285609);//0.0f, 0.0f, -1.0f); // cameraFront = {x=0.0778644159 y=-0.704634190 z=-0.705285609 ...}
+glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget); //cameraDirection = { x = 0.000000000 y = 0.000000000 z = 1.00000000 ... }
 
 glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection)); // cameraRight = {x=1.00000000 y=0.000000000 z=0.000000000 ...}
+glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight); // cameraUp = {x=0.000000000 y=1.00000000 z=0.000000000 ...}
 
 GLfloat lastX = 160; // center of window
 GLfloat lastY = 160;
@@ -38,8 +38,6 @@ GLfloat pitch = 0; // center of window
 GLfloat yaw = 0;
 
 float eyex, eyey, eyez;	// eye position
-
-float treeDensity = 0.2;
 
 struct Master {
 	GLuint vao;
@@ -68,8 +66,10 @@ struct Sys {
 	vector<glm::mat4> Lmat, LmatT, LmatEnd;
 };
 
-Sys tree1;
+Sys pineTree, bigTree, tallTree, scrubTree;
 
+vector<glm::vec3> treeMap;
+float treeDensity = 0.04; //0.005;
 
 int triangles;
 int scaleFactor = 0;
@@ -78,6 +78,7 @@ int cols = 30;
 int index_count = 3 * 2 * (rows - 1)*(cols - 1);
 std::default_random_engine generator;
 std::normal_distribution<double> distribution(0.0, 1.0);
+std::normal_distribution<double> tDist(0.5, 0.5);
 float* heights;
 
 int upSize = 100;
@@ -292,9 +293,18 @@ Master *make_terrain(GLuint prog) {
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			verts[vi] = verts[vi++];
-			verts[vi] = verts[vi++];
-			verts[vi] = verts[vi++];
+			vi++;
+			if (verts[vi] > (0.01 * upSize)) {
+				float r = (rand() % 10000) / 10000.0f;
+
+				if (r < treeDensity) {
+					treeMap.push_back(glm::vec3(verts[vi - 1], verts[vi], verts[vi + 1]));
+				}
+				
+			}
+			vi++;
+			vi++;
+			vi++;
 		}
 	}
 
@@ -573,7 +583,7 @@ Sys computeLSys(string start, string *rules, int ruleSize, float xa, float za, i
 			if (pos <= 0) {
 				bfAngle = 0.0;
 				lrAngle = 0.0;
-				rads = 0.8;
+				rads = radius;
 			}
 			else {
 				bfAngle = Lsystem.at(pos - 1).bfAngle;
@@ -707,9 +717,20 @@ void init() {
 	// { "F=F[+FF]F[-FFF]F[=FF][_FFF]F" };
 	// { "F=F[+FF]F[-FFF]F[=FF][_FF][+_FF]F[-_FFF]F[+=FF][-=FF]F" };
 
-	string rules[1] = { "F=FF" };
-	
-	tree1 = computeLSys("F", rules, 1, 30.0f, 30.0f, 4, 0.8, true, true);
+
+	string rulesP[1] = { "F=FFF" };
+	pineTree = computeLSys("F", rulesP, 1, 30.0f, 30.0f, 2, 0.8, true, true);
+
+	string rulesT[1] = { "F=FF[+FF]F[-FFF]F[=FF][_FFF]F" };
+	tallTree = computeLSys("F", rulesT, 1, 30.0f, 30.0f, 2, 0.4, true, false);
+
+	string rulesB[3] = { "F=FF", "G=FF[++FG][--FG][==FG][__FG]FH", "H=FF[+++==FG][---==FG][+++__FG][---__FG]FG" };
+	bigTree = computeLSys("G", rulesB, 3, 30.0f, 30.0f, 3, 0.8, true, false);
+
+	string rulesS[1] = { "F=[+FF[_FF][=FF]][-FF[=FF][_FF]][_FF[-FF][+FF]][=FF[+FF][-FF]]" };//{ "F=[+F[_F][=F]][-F[=F][_F]][=F[+F][-F]][_F[+F][-F]][+_F[+F][-F]][-_F][-=F][+=F]F" };
+	scrubTree = computeLSys("F", rulesS, 1, 30.0f, 30.0f, 2, 0.2, false, false);
+
+	treeMap.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
 
 	int vs;
@@ -850,50 +871,78 @@ void displayFunc() {
 
 	/////////////////////////////////////////////////////////////
 
+	Sys renderSys;
 
+	for (int t = 0; t < treeMap.size(); t++) {
 
-	/* colour - Brown */
-	glUniform4f(colourLoc, 0.502, 0.502, 0.100, 1.0);
+		if (7.0 * upSize <= treeMap.at(t).y) {
+			renderSys = pineTree;
+		}
 
-	/* draw Trunk */
-	
-	for (int i = 0; i < tree1.Lsystem.size(); i++) { // Lsystem.size()
-		matrixStack.push(model);
+		if (4.0 * upSize <= treeMap.at(t).y && treeMap.at(t).y < 7.0 * upSize) {
+			renderSys = tallTree;
+		}
 
-		model = tree1.Lmat.at(i);
-		modelT = tree1.LmatT.at(i); // Need to use separate matrices for the vetrices and normals. The normals don't care about position, only rotation.
+		if (1.0 * upSize <= treeMap.at(t).y &&  treeMap.at(t).y < 4.0 * upSize) {
+			renderSys = bigTree;
+		}
 
-		glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-		glBindVertexArray(cylinder->vao);
-		glBindBuffer(GL_ARRAY_BUFFER, cylinder->vbuffer);
-		glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-		glUniformMatrix4fv(modelLoc2, 1, 0, glm::value_ptr(modelT));
-		glDrawElements(GL_TRIANGLES, cylinder->indices, GL_UNSIGNED_INT, NULL);
-		model = matrixStack.top();
-		matrixStack.pop();
-	}
+		if (0.01 * upSize <= treeMap.at(t).y && treeMap.at(t).y < 1.0 * upSize) {
+			renderSys = scrubTree;
+		}
 
-	/* colour - green */
-	glUniform4f(colourLoc, 0.10, 0.592, 0.100, 1.0);
+		/* colour - Brown */
+		glUniform4f(colourLoc, 0.502, 0.502, 0.100, 1.0);
 
-	/* draw Leaves */
-	model = glm::mat4(1.0);
+		/* draw Trunk */
 
-	for (int i = 0; i < tree1.Lsystem.size(); i++) {
-		if (tree1.Lsystem.at(i).end == true) {
+		for (int i = 0; i < renderSys.Lsystem.size(); i++) { // Lsystem.size()
 			matrixStack.push(model);
 
-			model = tree1.LmatEnd.at(i);
+			model = renderSys.Lmat.at(i);
+			modelT = renderSys.LmatT.at(i); // Need to use separate matrices for the vetrices and normals. The normals don't care about position, only rotation.
+
+			model[3].x += treeMap.at(t).x;
+			model[3].y += treeMap.at(t).y;
+			model[3].z += treeMap.at(t).z;
 
 			glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-			glBindVertexArray(pyramid->vao);
-			glBindBuffer(GL_ARRAY_BUFFER, pyramid->vbuffer);
+			glBindVertexArray(cylinder->vao);
+			glBindBuffer(GL_ARRAY_BUFFER, cylinder->vbuffer);
 			glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-			glDrawElements(GL_TRIANGLES, pyramid->indices, GL_UNSIGNED_INT, NULL);
+			glUniformMatrix4fv(modelLoc2, 1, 0, glm::value_ptr(modelT));
+			glDrawElements(GL_TRIANGLES, cylinder->indices, GL_UNSIGNED_INT, NULL);
 			model = matrixStack.top();
 			matrixStack.pop();
 		}
+
+		/* colour - green */
+		glUniform4f(colourLoc, 0.10, 0.592, 0.100, 1.0);
+
+		/* draw Leaves */
+		model = glm::mat4(1.0);
+
+		for (int i = 0; i < renderSys.Lsystem.size(); i++) {
+			if (renderSys.Lsystem.at(i).end == true) {
+				matrixStack.push(model);
+
+				model = renderSys.LmatEnd.at(i);
+
+				model[3].x += treeMap.at(t).x;
+				model[3].y += treeMap.at(t).y;
+				model[3].z += treeMap.at(t).z;
+
+				glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
+				glBindVertexArray(pyramid->vao);
+				glBindBuffer(GL_ARRAY_BUFFER, pyramid->vbuffer);
+				glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
+				glDrawElements(GL_TRIANGLES, pyramid->indices, GL_UNSIGNED_INT, NULL);
+				model = matrixStack.top();
+				matrixStack.pop();
+			}
+		}
 	}
+
 
 	/////////////////////////////////////////////////////////////
 
@@ -934,6 +983,8 @@ void displayFunc() {
 void keyboardFunc(unsigned char key, int x, int y) {
 
 	GLfloat cameraSpeed = 0.15f * upSize;
+
+	
 
 	switch (key) {
 	case 'a':
