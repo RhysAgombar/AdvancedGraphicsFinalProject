@@ -32,7 +32,7 @@ void main() {
 		specular =  pow(max(0.0, dot(N,R)),material.w);
 	}
 
-	c = colour;
+	c = vec4(0.0,0.0,1.0,1.0);
 	
 	gl_FragColor = min(material.x * c + material.y * diffuse * c + material.z * white * specular, vec4(1.0));
 	gl_FragColor.a = c.a;

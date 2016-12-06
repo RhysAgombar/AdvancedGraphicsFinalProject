@@ -160,6 +160,8 @@
   <ItemGroup>
     <None Include="lab2.fs" />
     <None Include="lab2.vs" />
+    <None Include="lab2_2.fs" />
+    <None Include="lab2_2.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

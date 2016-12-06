@@ -40,5 +40,11 @@
     <None Include="lab2.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="lab2_2.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="lab2_2.fs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

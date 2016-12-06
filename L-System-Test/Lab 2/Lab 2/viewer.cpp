@@ -18,7 +18,7 @@
 
 using namespace std;
 
-GLuint program;			// shader programs
+GLuint program, programT;			// shader programs
 int window;
 
 glm::mat4 projection;
@@ -418,7 +418,7 @@ Master *make_terrain() {
 	return result;
 }
 
-Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
+Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes, GLuint prog) {
 	Master *result;
 	GLuint vao;
 
@@ -481,11 +481,11 @@ Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, ni * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
-	vPosition = glGetAttribLocation(program, "vPosition");
+	vPosition = glGetAttribLocation(prog, "vPosition");
 	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(vPosition);
 
-	vNormal = glGetAttribLocation(program, "vNormal");
+	vNormal = glGetAttribLocation(prog, "vNormal");
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (void*)(nv * sizeof(GLfloat)));
 	glEnableVertexAttribArray(vNormal);
 
@@ -721,6 +721,11 @@ void init() {
 	program = buildProgram(vs, fs, 0);
 	dumpProgram(program, "Assignment 3");
 
+	vs = buildShader(GL_VERTEX_SHADER, "lab2_2.vs");
+	fs = buildShader(GL_FRAGMENT_SHADER, "lab2_2.fs");
+	programT = buildProgram(vs, fs, 0);
+	dumpProgram(programT, "Assignment 3");
+
 
 
 	glUseProgram(program);
@@ -732,7 +737,10 @@ void init() {
 		return;
 	}
 
-	cylinder = make_shape_from_obj(shapes);
+	cylinder = make_shape_from_obj(shapes, program);
+
+
+	glUseProgram(programT);
 
 	err = tinyobj::LoadObj(shapes, materials, "pyramid.obj", 0);
 
@@ -741,7 +749,7 @@ void init() {
 		return;
 	}
 
-	pyramid = make_shape_from_obj(shapes);
+	pyramid = make_shape_from_obj(shapes, programT);
 
 }
 
@@ -856,6 +864,22 @@ void displayFunc() {
 		model = matrixStack.top();
 		matrixStack.pop();
 	}
+
+
+	glUseProgram(programT);
+	viewLoc = glGetUniformLocation(programT, "projection");
+	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(viewPerspective));
+	modelLoc = glGetUniformLocation(programT, "modelView");
+	modelLoc2 = glGetUniformLocation(programT, "modelView2");
+	colourLoc = glGetUniformLocation(programT, "colour");
+	vPosition = glGetAttribLocation(programT, "vPosition");
+
+	camLoc = glGetUniformLocation(programT, "Eye");
+	glUniform3f(camLoc, cameraPos.x, 0.0f, cameraPos.z);
+	lightLoc = glGetUniformLocation(programT, "light");
+	glUniform3f(lightLoc, 1.0f, 1.0f, 1.0f);
+	materialLoc = glGetUniformLocation(programT, "material");
+	glUniform4f(materialLoc, 0.3, 0.7, 0.7, 150.0);
 
 	/* colour - green */
 	glUniform4f(colourLoc, 0.10, 0.592, 0.100, 1.0);
