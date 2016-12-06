@@ -13,7 +13,11 @@ out vec3 normal;
 out vec3 position;
 
 void main() {
+	//gl_Position = projection * modelView * vPosition;
+	//normal = ((modelView2 * vec4(vNormal,1.0)).xyz);    //modelView *
+	//position = gl_Position.xyz;
+
 	gl_Position = projection * modelView * vPosition;
-	normal = ((modelView2 * vec4(vNormal,1.0)).xyz);    //modelView *
-	position = gl_Position.xyz;
+	position = vPosition.xyz;
+	normal = vNormal;
 }

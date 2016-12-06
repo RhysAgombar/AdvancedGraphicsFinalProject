@@ -39,6 +39,8 @@ GLfloat yaw = 0;
 
 float eyex, eyey, eyez;	// eye position
 
+float treeDensity = 0.2;
+
 struct Master {
 	GLuint vao;
 	int indices;
@@ -47,7 +49,7 @@ struct Master {
 	GLfloat *vertices;
 };
 
-Master *cylinder, *pyramid;
+Master *cylinder, *pyramid, *ground;
 
 struct Node {
 	Master obj;
@@ -77,6 +79,8 @@ int index_count = 3 * 2 * (rows - 1)*(cols - 1);
 std::default_random_engine generator;
 std::normal_distribution<double> distribution(0.0, 1.0);
 float* heights;
+
+int upSize = 100;
 
 void expandMap(GLfloat*(&map)) {
 
@@ -179,13 +183,13 @@ void expandMap(GLfloat*(&map)) {
 				v1[pos + 1] /= count;
 				v1[pos + 2] /= count;
 
-				if (v1[pos + 1] > 0.02) {
+				if (v1[pos + 1] > 0.02 * upSize) {
 					double r = distribution(generator);
-					v1[pos + 1] += (r * (0.01));
+					v1[pos + 1] += (r * (0.007 * upSize));
 				}
 				else {
 					double r = distribution(generator);
-					v1[pos + 1] += (r * (0.002));
+					v1[pos + 1] += (r * (0.002 * upSize));
 				}
 
 			}
@@ -233,7 +237,7 @@ void findNormal(GLfloat* p1, GLfloat* p2, GLfloat* p3, GLfloat(&n)[3]) {
 	//std::cout << "{ " << n[0] << ", " << n[1] << ", " << n[2] << " }" << std::endl;
 }
 
-Master *make_terrain() {
+Master *make_terrain(GLuint prog) {
 	Master *result;
 	GLuint vao;
 
@@ -261,9 +265,9 @@ Master *make_terrain() {
 	{
 		for (int j = 0; j < cols; ++j)
 		{
-			verts[vi++] = i;
-			verts[vi++] = heights[hi++];
-			verts[vi++] = j;
+			verts[vi++] = i * upSize;
+			verts[vi++] = heights[hi++] * upSize;
+			verts[vi++] = j * upSize;
 			verts[vi++] = 1.0;
 			if (((j + 1) < cols) && ((i + 1) < rows))
 			{
@@ -406,11 +410,11 @@ Master *make_terrain() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, i_size, inds, GL_STATIC_DRAW);
 
-	vPosition = glGetAttribLocation(program, "vPosition");
+	vPosition = glGetAttribLocation(prog, "vPosition");
 	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(vPosition);
 
-	vNormal = glGetAttribLocation(program, "vNormal");
+	vNormal = glGetAttribLocation(prog, "vNormal");
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (void*)v_size);
 	glEnableVertexAttribArray(vNormal);
 
@@ -751,6 +755,8 @@ void init() {
 
 	pyramid = make_shape_from_obj(shapes, programT);
 
+	ground = make_terrain(programT);
+
 }
 
 void changeSize(int w, int h) {
@@ -765,7 +771,7 @@ void changeSize(int w, int h) {
 
 	glViewport(0, 0, w, h);
 
-	projection = glm::perspective(45.0f, ratio, 1.0f, 1000.0f);
+	projection = glm::perspective(45.0f, ratio, 1.0f, 10000.0f);
 
 }
 
@@ -844,6 +850,8 @@ void displayFunc() {
 
 	/////////////////////////////////////////////////////////////
 
+
+
 	/* colour - Brown */
 	glUniform4f(colourLoc, 0.502, 0.502, 0.100, 1.0);
 
@@ -864,22 +872,6 @@ void displayFunc() {
 		model = matrixStack.top();
 		matrixStack.pop();
 	}
-
-
-	glUseProgram(programT);
-	viewLoc = glGetUniformLocation(programT, "projection");
-	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(viewPerspective));
-	modelLoc = glGetUniformLocation(programT, "modelView");
-	modelLoc2 = glGetUniformLocation(programT, "modelView2");
-	colourLoc = glGetUniformLocation(programT, "colour");
-	vPosition = glGetAttribLocation(programT, "vPosition");
-
-	camLoc = glGetUniformLocation(programT, "Eye");
-	glUniform3f(camLoc, cameraPos.x, 0.0f, cameraPos.z);
-	lightLoc = glGetUniformLocation(programT, "light");
-	glUniform3f(lightLoc, 1.0f, 1.0f, 1.0f);
-	materialLoc = glGetUniformLocation(programT, "material");
-	glUniform4f(materialLoc, 0.3, 0.7, 0.7, 150.0);
 
 	/* colour - green */
 	glUniform4f(colourLoc, 0.10, 0.592, 0.100, 1.0);
@@ -905,13 +897,43 @@ void displayFunc() {
 
 	/////////////////////////////////////////////////////////////
 
+	glUseProgram(programT);
+	viewLoc = glGetUniformLocation(programT, "projection");
+	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(viewPerspective));
+	modelLoc = glGetUniformLocation(programT, "modelView");
+	modelLoc2 = glGetUniformLocation(programT, "modelView2");
+	colourLoc = glGetUniformLocation(programT, "colour");
+	vPosition = glGetAttribLocation(programT, "vPosition");
+
+	camLoc = glGetUniformLocation(programT, "Eye");
+	glUniform3f(camLoc, cameraPos.x, 0.0f, cameraPos.z);
+	lightLoc = glGetUniformLocation(programT, "light");
+	glUniform3f(lightLoc, 1.0f, 1.0f, 1.0f);
+	materialLoc = glGetUniformLocation(programT, "material");
+	glUniform4f(materialLoc, 0.3, 0.7, 0.7, 150.0);
+
+	/* draw Ground */
+	model = glm::mat4(1.0);
+
+	matrixStack.push(model);
+
+	glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
+	glBindVertexArray(ground->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, ground->vbuffer);
+	glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
+	glDrawElements(GL_TRIANGLES, ground->indices * 3, GL_UNSIGNED_INT, NULL);
+	model = matrixStack.top();
+	matrixStack.pop();
+
+	/////////////////////////////////////////////////////////////
+
 	glutSwapBuffers();
 
 }
 
 void keyboardFunc(unsigned char key, int x, int y) {
 
-	GLfloat cameraSpeed = 0.15f;
+	GLfloat cameraSpeed = 0.15f * upSize;
 
 	switch (key) {
 	case 'a':
@@ -999,6 +1021,22 @@ int main(int argc, char **argv) {
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(1.0, 1.0, 1.0, 1.0);
+
+	std::string in;
+	std::fstream file("heightmap.txt");
+
+	heights = new GLfloat[cols*rows];
+
+	file >> rows;
+	cols = rows;
+
+	file >> scaleFactor;
+
+	for (int i = 0; i < cols * rows; i++) {
+		file >> heights[i];
+	}
+
+	file.close();
 
 	init();
 
