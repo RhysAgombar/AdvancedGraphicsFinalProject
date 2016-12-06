@@ -1,0 +1,23 @@
+﻿  viewer.cpp
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(59): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(93): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(104): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(112): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(220): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(267): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(275): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(346): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(357): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(403): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(481): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(487): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(508): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(454): warning C4101: 'projLoc': unreferenced local variable
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(452): warning C4101: 'black': unreferenced local variable
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(561): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(562): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(568): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(569): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\l-system-test\lab 2\lab 2\viewer.cpp(571): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  Lab 2.vcxproj -> C:\Users\100515147\Desktop\L-System-Test\Lab 2\x64\Debug\Lab 2.exe
+  Lab 2.vcxproj -> C:\Users\100515147\Desktop\L-System-Test\Lab 2\x64\Debug\Lab 2.pdb (Full PDB)

@@ -1,0 +1,32 @@
+﻿  Shaders.cpp
+Shaders.cpp(12): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  tiny_obj_loader.cc
+tiny_obj_loader.cc(84): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+tiny_obj_loader.cc(85): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+tiny_obj_loader.cc(199): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+tiny_obj_loader.cc(463): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+tiny_obj_loader.cc(336): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+tiny_obj_loader.cc(609): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+tiny_obj_loader.cc(611): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+tiny_obj_loader.cc(625): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+tiny_obj_loader.cc(645): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+tiny_obj_loader.cc(705): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  tiny_obj_loader.cc(326): note: see reference to function template instantiation 'std::pair<std::string,int>::pair<std::string&,unsigned __int64,void,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Other1=std::string &,
+              _Other2=unsigned __int64
+          ]
+  tiny_obj_loader.cc(326): note: see reference to function template instantiation 'std::pair<std::string,int>::pair<std::string&,unsigned __int64,void,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Other1=std::string &,
+              _Other2=unsigned __int64
+          ]
+  viewer.cpp
+viewer.cpp(11): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
