@@ -1,12 +1,3 @@
-/************************************************************
-*                   CSCI 4110 Lab 2
-*
-*  Basic OpenGL program that shows how to set up a
-*  VAO and some basic shaders.  This program draws
-*  a cube or sphere depending upon whether CUBE or
-*  SPHERE is defined.
-*
-*/
 #include <Windows.h>
 #include <GL/glew.h>
 #include <gl/glut.h>
@@ -54,7 +45,7 @@ struct Master {
 	GLfloat *vertices;
 };
 
-Master *cylinder, *sphere;
+Master *cylinder, *pyramid;
 
 struct Node {
 	Master obj;
@@ -68,12 +59,12 @@ float toRadians(float degrees) {
 	return degrees / 57.2958;
 }
 
-vector<Node> Lsystem;
-vector<glm::mat4> Lmat, LmatT, LmatEnd;
-float xangle = toRadians(30); //0.523599 / 2; // 30/2 degrees in radians
-float zangle = toRadians(30); //0.523599 / 2;
+struct Sys {
+	vector<Node> Lsystem;
+	vector<glm::mat4> Lmat, LmatT, LmatEnd;
+};
 
-string sys;
+Sys tree1;
 
 Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
 	Master *result;
@@ -90,7 +81,6 @@ Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
 	int nn;
 	int ni;
 	int i;
-
 
 	result = new Master;
 
@@ -150,12 +140,22 @@ Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
 	return(result);
 }
 
-string computeLSys() {
+Sys computeLSys(string start, string *rules, int ruleSize, float xa, float za, int iter, float radius, bool leaves, bool conif) {
 
-	string lSys = "F";
-	int rSize = 1;
-	string rules[1] = {"F=F[+FF]F[-FFF]F[=FF][_FFF]F"};//{ "F=FF", "X=C0F-[C2[X]+C3X]_[C2[X]+C3X]=[C2[X]+C3X]-[C2[X]+C3X]+C1F[C3+FX]_C1F[C3+FX]-X" }; //"F=FF", "G=FF[++FG][--FG][==FG][__FG]FH", "H=FF[+++==FG][---==FG][+++__FG][---__FG]FG"   //"F=FF", "G=FF[+FG][-FG][=FG][_FG]FH", "H=FF[++==FG][--+=FG][++__FG][--__FG]FG" 
-	int iterations = 2;
+	Sys newSystem;
+
+	string sys;
+
+	vector<Node> Lsystem;
+	vector<glm::mat4> Lmat, LmatT, LmatEnd;
+
+	string lSys = start;
+	int rSize = ruleSize;
+	int iterations = iter;
+
+
+	float xangle = toRadians(xa); //0.523599 / 2; // 30/2 degrees in radians
+	float zangle = toRadians(za); //0.523599 / 2;
 
 	string lSysH = "";
 	bool flag = false;
@@ -185,7 +185,7 @@ string computeLSys() {
 	stack<int> vecPosStack;
 
 	int pos = 0;
-	float rads = 0.3;
+	float rads = radius;
 
 	for (int i = 0; i < lSys.size(); i++) {
 
@@ -208,7 +208,9 @@ string computeLSys() {
 			break;
 		case ']':
 
-			Lsystem.at(pos - 1).end = true;
+			if (leaves == true) {
+				Lsystem.at(pos - 1).end = true;
+			}
 
 			pos = vecPosStack.top(); // Som vec position
 			vecPosStack.pop();
@@ -264,20 +266,30 @@ string computeLSys() {
 			Lsystem.push_back(step);
 			pos = Lsystem.size();
 
+			if (pos > 0) {
+				if (leaves == true) {
+					if (conif == true) {
+						if ((pos - 2) % 3 == 0) {
+							Lsystem.at(pos - 1).end = true;
+							if (pos > 1) {
+								Lsystem.at(pos - 1).radius = Lsystem.at(pos - 2).radius / 1.3;
+							}
+
+						}
+						else {
+							if (pos > 1) {
+								Lsystem.at(pos - 1).radius = Lsystem.at(pos - 2).radius;
+							}
+							
+						}
+					}
+				}
+			}
+
+
 		}
 
 	}
-
-	return lSys;
-
-
-}
-
-void init() {
-
-	srand(time(NULL));
-
-	sys = computeLSys();
 
 	glm::mat4 model, model2, model3;
 
@@ -285,7 +297,7 @@ void init() {
 		model = glm::mat4(1.0);
 		model2 = glm::mat4(1.0);
 		model3 = glm::mat4(1.0);
-		if (i > 0) {			
+		if (i > 0) {
 			model = glm::translate(model, Lsystem.at(i).startPos); // (left/right, up, forward/back)
 		}
 		else {
@@ -317,6 +329,32 @@ void init() {
 		LmatEnd.push_back(model3);
 	}
 
+
+	newSystem.Lmat = Lmat;
+	newSystem.LmatT = LmatT;
+	newSystem.LmatEnd = LmatEnd;
+
+	newSystem.Lsystem = Lsystem;
+
+	return newSystem;
+
+
+}
+
+void init() {
+
+	srand(time(NULL));
+
+	//{ "F=FF", "X=C0F-[C2[X]+C3X]_[C2[X]+C3X]=[C2[X]+C3X]-[C2[X]+C3X]+C1F[C3+FX]_C1F[C3+FX]-X" };
+	//"F=FF", "G=FF[++FG][--FG][==FG][__FG]FH", "H=FF[+++==FG][---==FG][+++__FG][---__FG]FG"
+	//"F=FF", "G=FF[+FG][-FG][=FG][_FG]FH", "H=FF[++==FG][--+=FG][++__FG][--__FG]FG" 
+	// { "F=F[+FF]F[-FFF]F[=FF][_FFF]F" };
+	// { "F=F[+FF]F[-FFF]F[=FF][_FF][+_FF]F[-_FFF]F[+=FF][-=FF]F" };
+
+	string rules[1] = { "F=FF" };
+
+
+	 tree1 = computeLSys("F", rules, 1, 30.0f, 30.0f, 4, 0.8, true, true);
 
 
 	int vs;
@@ -350,14 +388,10 @@ void init() {
 		return;
 	}
 
-	sphere = make_shape_from_obj(shapes);
+	pyramid = make_shape_from_obj(shapes);
 
 }
 
-/*
-*  Executed each time the window is resized,
-*  usually once at the start of the program.
-*/
 void changeSize(int w, int h) {
 
 	// Prevent a divide by zero, when window is too short
@@ -447,16 +481,18 @@ void displayFunc() {
 	glUniform4f(materialLoc, 0.3, 0.7, 0.7, 150.0);
 
 
+	/////////////////////////////////////////////////////////////
+
 	/* colour - Brown */
 	glUniform4f(colourLoc, 0.502, 0.502, 0.100, 1.0);
 
 	/* draw Trunk */
 	
-	for (int i = 0; i < Lsystem.size(); i++) { // Lsystem.size()
+	for (int i = 0; i < tree1.Lsystem.size(); i++) { // Lsystem.size()
 		matrixStack.push(model);
 
-		model = Lmat.at(i);
-		modelT = LmatT.at(i); // Need to use separate matrices for the vetrices and normals. The normals don't care about position, only rotation.
+		model = tree1.Lmat.at(i);
+		modelT = tree1.LmatT.at(i); // Need to use separate matrices for the vetrices and normals. The normals don't care about position, only rotation.
 
 		glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
 		glBindVertexArray(cylinder->vao);
@@ -472,25 +508,25 @@ void displayFunc() {
 	glUniform4f(colourLoc, 0.10, 0.592, 0.100, 1.0);
 
 	/* draw Leaves */
-
 	model = glm::mat4(1.0);
 
-	for (int i = 0; i < Lsystem.size(); i++) {
-		if (Lsystem.at(i).end == true) {
+	for (int i = 0; i < tree1.Lsystem.size(); i++) {
+		if (tree1.Lsystem.at(i).end == true) {
 			matrixStack.push(model);
 
-			model = LmatEnd.at(i);
+			model = tree1.LmatEnd.at(i);
 
 			glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-			glBindVertexArray(sphere->vao);
-			glBindBuffer(GL_ARRAY_BUFFER, sphere->vbuffer);
+			glBindVertexArray(pyramid->vao);
+			glBindBuffer(GL_ARRAY_BUFFER, pyramid->vbuffer);
 			glUniformMatrix4fv(modelLoc, 1, 0, glm::value_ptr(model));
-			glDrawElements(GL_TRIANGLES, sphere->indices, GL_UNSIGNED_INT, NULL);
+			glDrawElements(GL_TRIANGLES, pyramid->indices, GL_UNSIGNED_INT, NULL);
 			model = matrixStack.top();
 			matrixStack.pop();
 		}
 	}
 
+	/////////////////////////////////////////////////////////////
 
 	glutSwapBuffers();
 
@@ -594,21 +630,3 @@ int main(int argc, char **argv) {
 	glutMainLoop();
 
 }
-
-
-//
-//matrixStack.push(model);
-//
-//model = glm::mat4(1.0);
-//
-//if (i > 0) {
-//	model = glm::translate(model, Lsystem.at(i).endPos); // (left/right, up, forward/back)
-//}
-//else {
-//	model = glm::translate(model, glm::vec3(0.0, 0.0, 0.0)); // (left/right, up, forward/back)
-//}
-//
-//model = glm::rotate(model, Lsystem.at(i).lrAngle, glm::vec3(0.0, 0.0, 1.0)); // Left/right
-//model = glm::rotate(model, Lsystem.at(i).bfAngle, glm::vec3(1.0, 0.0, 0.0)); // back/fourth
-//
-//model = glm::scale(model, glm::vec3(Lsystem.at(i).radius * 10, Lsystem.at(i).radius * 10, Lsystem.at(i).radius * 10));

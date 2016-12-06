@@ -1,22 +1,23 @@
 ﻿  viewer.cpp
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(68): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(103): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(114): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(122): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(188): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(218): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(265): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(278): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(387): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(465): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(469): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(491): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(438): warning C4101: 'projLoc': unreferenced local variable
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(436): warning C4101: 'black': unreferenced local variable
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(541): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(542): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(548): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(549): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\100515147\desktop\advanced computer graphics\assignments\final project\lab 2\lab 2\viewer.cpp(551): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-  Lab 2.vcxproj -> C:\Users\100515147\Desktop\Advanced Computer Graphics\Assignments\Final Project\Lab 2\x64\Debug\Lab 2.exe
-  Lab 2.vcxproj -> C:\Users\100515147\Desktop\Advanced Computer Graphics\Assignments\Final Project\Lab 2\x64\Debug\Lab 2.pdb (Full PDB)
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(59): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(93): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(104): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(112): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(220): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(267): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(275): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(346): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(357): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(403): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(481): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(487): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(508): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(454): warning C4101: 'projLoc': unreferenced local variable
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(452): warning C4101: 'black': unreferenced local variable
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(561): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(562): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(568): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(569): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\100515147\desktop\advanced computer graphics\assignments\final project\advancedgraphicsfinalproject\l-system-test\lab 2\lab 2\viewer.cpp(571): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  Lab 2.vcxproj -> C:\Users\100515147\Desktop\Advanced Computer Graphics\Assignments\Final Project\AdvancedGraphicsFinalProject\L-System-Test\Lab 2\x64\Debug\Lab 2.exe
+  Lab 2.vcxproj -> C:\Users\100515147\Desktop\Advanced Computer Graphics\Assignments\Final Project\AdvancedGraphicsFinalProject\L-System-Test\Lab 2\x64\Debug\Lab 2.pdb (Full PDB)
