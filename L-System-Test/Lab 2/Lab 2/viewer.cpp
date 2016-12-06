@@ -237,6 +237,8 @@ Master *make_terrain() {
 	Master *result;
 	GLuint vao;
 
+	result = new Master;
+
 	GLuint vbuffer;
 	GLuint ibuffer;
 	GLint vPosition;
@@ -244,6 +246,7 @@ Master *make_terrain() {
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
+	result->vao = vao;
 
 	GLfloat * verts = new GLfloat[4 * rows*cols];
 	GLfloat * norms = new GLfloat[3 * rows*cols];
@@ -382,15 +385,22 @@ Master *make_terrain() {
 		ni++;
 	}
 
+	result->indices = ni;
+
 	int v_size = rows * cols * 4 * sizeof(*verts);
 	int n_size = rows * cols * 3 * sizeof(*norms);
 	int i_size = index_count * sizeof(*inds);
+
+
+	result->nv = 4*rows*cols;
+	result->vertices = verts;
 
 	glGenBuffers(1, &vbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vbuffer);
 	glBufferData(GL_ARRAY_BUFFER, v_size + n_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, v_size, verts);
 	glBufferSubData(GL_ARRAY_BUFFER, v_size, n_size, norms);
+	result->vbuffer = vbuffer;
 
 	glGenBuffers(1, &ibuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
@@ -404,6 +414,8 @@ Master *make_terrain() {
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (void*)v_size);
 	glEnableVertexAttribArray(vNormal);
 
+
+	return result;
 }
 
 Master *make_shape_from_obj(std::vector<tinyobj::shape_t> shapes) {
