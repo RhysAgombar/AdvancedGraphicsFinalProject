@@ -709,7 +709,7 @@ Sys computeLSys(string start, string *rules, int ruleSize, float xa, float za, i
 
 void init() {
 
-	//srand(time(NULL));
+	srand(time(NULL));
 
 	//{ "F=FF", "X=C0F-[C2[X]+C3X]_[C2[X]+C3X]=[C2[X]+C3X]-[C2[X]+C3X]+C1F[C3+FX]_C1F[C3+FX]-X" };
 	//"F=FF", "G=FF[++FG][--FG][==FG][__FG]FH", "H=FF[+++==FG][---==FG][+++__FG][---__FG]FG"
@@ -1082,6 +1082,8 @@ int main(int argc, char **argv) {
 	cols = rows;
 
 	file >> scaleFactor;
+
+	file >> treeDensity;
 
 	for (int i = 0; i < cols * rows; i++) {
 		file >> heights[i];

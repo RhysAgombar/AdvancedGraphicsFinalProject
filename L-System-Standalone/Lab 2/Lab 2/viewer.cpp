@@ -351,10 +351,10 @@ void init() {
 	// { "F=F[+FF]F[-FFF]F[=FF][_FFF]F" };
 	// { "F=F[+FF]F[-FFF]F[=FF][_FF][+_FF]F[-_FFF]F[+=FF][-=FF]F" };
 
-	string rules[3] = { "F=F[+FF]F[-FFF]F[=FF]F[_FF]F[+FF]F" };
+	string rules[3] = { "F=FF", "X=C0F-[C2[X]+C3X]_[C2[X]+C3X]=[C2[X]+C3X]-[C2[X]+C3X]+C1F[C3+FX]_C1F[C3+FX]-X" };
 
 
-	 tree1 = computeLSys("F", rules, 3, 90.0f, 90.0f, 4, 0.2, true, false);
+	 tree1 = computeLSys("X", rules, 2, 30.0f, 30.0f, 2, 0.8, true, false);
 
 
 	int vs;
